@@ -1,0 +1,147 @@
+[
+  {
+    "model": "planetarium.planetariumdome",
+    "pk": 1,
+    "fields": {
+      "name": "Main Dome",
+      "rows": 12,
+      "seats_in_row": 20
+    }
+  },
+  {
+    "model": "planetarium.planetariumdome",
+    "pk": 2,
+    "fields": {
+      "name": "Small Dome",
+      "rows": 8,
+      "seats_in_row": 15
+    }
+  },
+  {
+    "model": "planetarium.planetariumdome",
+    "pk": 3,
+    "fields": {
+      "name": "VIP Dome",
+      "rows": 6,
+      "seats_in_row": 10
+    }
+  },
+
+  {
+    "model": "planetarium.astronomyshow",
+    "pk": 1,
+    "fields": {
+      "title": "Journey to Mars",
+      "description": "A guided trip through the history and future of Mars exploration."
+    }
+  },
+  {
+    "model": "planetarium.astronomyshow",
+    "pk": 2,
+    "fields": {
+      "title": "Black Holes Mysteries",
+      "description": "Exploring the most enigmatic objects in the universe."
+    }
+  },
+  {
+    "model": "planetarium.astronomyshow",
+    "pk": 3,
+    "fields": {
+      "title": "The Birth of Stars",
+      "description": "A dive into stellar nurseries and star formation."
+    }
+  },
+
+  {
+    "model": "planetarium.showsession",
+    "pk": 1,
+    "fields": {
+      "astronomy_show": 1,
+      "planetarium_dome": 1,
+      "show_time": "2025-09-15T18:00:00Z"
+    }
+  },
+  {
+    "model": "planetarium.showsession",
+    "pk": 2,
+    "fields": {
+      "astronomy_show": 2,
+      "planetarium_dome": 2,
+      "show_time": "2025-09-16T19:30:00Z"
+    }
+  },
+  {
+    "model": "planetarium.showsession",
+    "pk": 3,
+    "fields": {
+      "astronomy_show": 3,
+      "planetarium_dome": 3,
+      "show_time": "2025-09-17T20:00:00Z"
+    }
+  },
+
+  {
+    "model": "planetarium.showtheme",
+    "pk": 1,
+    "fields": {
+      "name": "Space Travel",
+      "show": [1]
+    }
+  },
+  {
+    "model": "planetarium.showtheme",
+    "pk": 2,
+    "fields": {
+      "name": "Cosmology",
+      "show": [2, 3]
+    }
+  },
+
+  {
+    "model": "planetarium.reservation",
+    "pk": 1,
+    "fields": {
+      "created_at": "2025-09-10T10:00:00Z",
+      "user": 1
+    }
+  },
+  {
+    "model": "planetarium.reservation",
+    "pk": 2,
+    "fields": {
+      "created_at": "2025-09-11T11:00:00Z",
+      "user": 1
+    }
+  },
+
+  {
+    "model": "planetarium.ticket",
+    "pk": 1,
+    "fields": {
+      "row": 1,
+      "seat": 5,
+      "show_session": 1,
+      "reservation": 1
+    }
+  },
+  {
+    "model": "planetarium.ticket",
+    "pk": 2,
+    "fields": {
+      "row": 2,
+      "seat": 8,
+      "show_session": 2,
+      "reservation": 2
+    }
+  },
+  {
+    "model": "planetarium.ticket",
+    "pk": 3,
+    "fields": {
+      "row": 3,
+      "seat": 10,
+      "show_session": 3,
+      "reservation": 1
+    }
+  }
+]
