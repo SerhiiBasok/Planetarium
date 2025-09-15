@@ -50,8 +50,13 @@ class AstronomyShowViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
 
         if theme:
             theme = self._params_to_ints(theme)
-            queryset = queryset.filter(theme__id__in=theme).distinct()
-        return queryset
+            queryset = queryset.filter(theme__id__in=theme)
+
+        title = self.request.query_params.get("title")
+        if title:
+            queryset = queryset.filter(title__icontains=title)
+
+        return queryset.distinct()
 
 
 class ShowSessionViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
