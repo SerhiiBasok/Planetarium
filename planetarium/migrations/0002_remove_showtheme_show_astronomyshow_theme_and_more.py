@@ -6,22 +6,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('planetarium', '0001_initial'),
+        ("planetarium", "0001_initial"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='showtheme',
-            name='show',
+            model_name="showtheme",
+            name="show",
         ),
         migrations.AddField(
-            model_name='astronomyshow',
-            name='theme',
-            field=models.ManyToManyField(to='planetarium.showtheme'),
+            model_name="astronomyshow",
+            name="theme",
+            field=models.ManyToManyField(to="planetarium.showtheme"),
         ),
         migrations.AlterField(
-            model_name='showtheme',
-            name='name',
+            model_name="showtheme",
+            name="name",
             field=models.CharField(max_length=63, unique=True),
         ),
     ]

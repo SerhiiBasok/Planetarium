@@ -1,10 +1,12 @@
 from django.urls import path, include
 from rest_framework import routers
-from planetarium.views import (PlanetariumDomeViewSet,
-                               AstronomyShowViewSet,
-                               ShowSessionViewSet,
-                               ShowThemeViewSet,
-                               ReservationViewSet)
+from planetarium.views import (
+    PlanetariumDomeViewSet,
+    AstronomyShowViewSet,
+    ShowSessionViewSet,
+    ShowThemeViewSet,
+    ReservationViewSet,
+)
 
 app_name = "planetarium"
 

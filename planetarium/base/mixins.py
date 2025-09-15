@@ -12,11 +12,11 @@ class BaseViewSetMethodMixin:
 
         return super().get_serializer_class()
 
-    # def get_permissions(self):
-    #     if (
-    #         hasattr(self, "action_permissions")
-    #         and self.action in self.action_permissions
-    #     ):
-    #         return [permission() for permission in self.action_permissions[self.action]]
-    #
-    #     return super().get_permissions()
+    def get_permissions(self):
+        if (
+            hasattr(self, "action_permissions")
+            and self.action in self.action_permissions
+        ):
+            return [permission() for permission in self.action_permissions[self.action]]
+
+        return super().get_permissions()
