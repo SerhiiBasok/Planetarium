@@ -15,8 +15,15 @@ class PlanetariumDome(models.Model):
         return self.name
 
 
+class ShowTheme(models.Model):
+    name = models.CharField(max_length=63, unique=True)
+
+    def __str__(self):
+        return self.name
+
 class AstronomyShow(models.Model):
     title = models.CharField(max_length=255)
+    theme = models.ManyToManyField(ShowTheme)
     description = models.TextField()
 
     def __str__(self):
@@ -42,17 +49,6 @@ class ShowSession(models.Model):
 
     def __str__(self):
         return self.astronomy_show.title + " " + str(self.show_time)
-
-
-class ShowTheme(models.Model):
-    name = models.CharField(max_length=63)
-    show = models.ManyToManyField(
-        AstronomyShow,
-        related_name="themes"
-    )
-
-    def __str__(self):
-        return self.name
 
 
 class Reservation(models.Model):

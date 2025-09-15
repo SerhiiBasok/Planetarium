@@ -1,3 +1,4 @@
+from django.template.defaulttags import querystring
 from rest_framework import viewsets
 
 from planetarium.base.mixins import BaseViewSetMethodMixin
@@ -39,6 +40,19 @@ class AstronomyShowViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
         "list": AstronomyShowListSerializer
     }
 
+    def _params_to_ints(self, query_string):
+        """Converts a list of string IDs to a list of integers"""
+        return [int(str_id) for str_id in query_string.split(",")]
+
+    def get_queryset(self):
+        queryset = self.queryset
+        theme = self.request.query_params.get("theme")
+
+        if theme:
+            theme = self._params_to_ints(theme)
+            queryset = queryset.filter(theme__id__in=theme).distinct()
+        return queryset
+
 
 class ShowSessionViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
     queryset = ShowSession.objects.all()
@@ -56,7 +70,7 @@ class ShowThemeViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
 
 
 class ReservationViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
-    queryset = Reservation.objects.all()
+    queryset = Reservation.objects.prefetch_related("tickets")
     serializer_class = ReservationSerializer
 
     action_serializers = {
