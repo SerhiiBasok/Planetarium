@@ -1,53 +1,70 @@
 from rest_framework import viewsets
 
+from planetarium.base.mixins import BaseViewSetMethodMixin
 from planetarium.models import (PlanetariumDome,
                                 AstronomyShow,
                                 ShowSession,
                                 ShowTheme,
                                 Reservation,
-                                Ticket)
+                                )
 from planetarium.serializers import (PlanetariumDomeSerializer,
-                                     AstronomyShowSerializer,
-                                     ShowSessionSerializer,
+                                     AstronomyShowListSerializer,
+                                     ShowSessionListSerializer,
                                      ShowThemeSerializer,
                                      ReservationSerializer,
-                                     TicketSerializer,
                                      PlanetariumDomeDetailSerializer,
-                                     PlanetariumDomeListSerializer
+                                     PlanetariumDomeListSerializer,
+                                     AstronomyShowDetailSerializer,
+                                     ShowSessionDetailSerializer,
+                                     ShowSessionSerializer,
+                                     ReservationListSerializer,
                                      )
 
 
-class PlanetariumDomeViewSet(viewsets.ModelViewSet):
+class PlanetariumDomeViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
     queryset = PlanetariumDome.objects.all()
+    serializer_class = PlanetariumDomeSerializer
 
-    def get_serializer_class(self):
-        if self.action == "list":
-            return PlanetariumDomeListSerializer
-        if self.action == "retrieve":
-            return PlanetariumDomeDetailSerializer
-        return PlanetariumDomeSerializer
+    action_serializers = {
+        "list": PlanetariumDomeListSerializer,
+        "retrieve": PlanetariumDomeDetailSerializer
+    }
 
 
-class AstronomyShowViewSet(viewsets.ModelViewSet):
+class AstronomyShowViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
     queryset = AstronomyShow.objects.all()
-    serializer_class = AstronomyShowSerializer
+    serializer_class = AstronomyShowDetailSerializer
+
+    action_serializers = {
+        "list": AstronomyShowListSerializer
+    }
 
 
-class ShowSessionViewSet(viewsets.ModelViewSet):
+class ShowSessionViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
     queryset = ShowSession.objects.all()
     serializer_class = ShowSessionSerializer
 
+    action_serializers = {
+        "list": ShowSessionListSerializer,
+        "retrieve": ShowSessionDetailSerializer
+    }
 
-class ShowThemeViewSet(viewsets.ModelViewSet):
+
+class ShowThemeViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
     queryset = ShowTheme.objects.all()
     serializer_class = ShowThemeSerializer
 
 
-class ReservationViewSet(viewsets.ModelViewSet):
+class ReservationViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
 
+    action_serializers = {
+        "list": ReservationListSerializer
+    }
 
-class TicketViewSet(viewsets.ModelViewSet):
-    queryset = Ticket.objects.all()
-    serializer_class = TicketSerializer
+    # def get_queryset(self):
+    #     return self.queryset.filter(user=self.request.user)
+    #
+    # def perform_create(self, serializer):
+    #     serializer.save(user=self.request.user)
