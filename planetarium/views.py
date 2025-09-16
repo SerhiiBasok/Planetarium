@@ -1,4 +1,5 @@
 from django.db.models import F, Count
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -7,6 +8,7 @@ from rest_framework.response import Response
 from planetarium.base.mixins import BaseViewSetMethodMixin
 from planetarium.base.pagination import PlanetariumPagination
 from planetarium.base.permissions import IsAdminOrIfAuthenticatedReadOnly
+from planetarium.base.swagger_schemas import theme_schema
 from planetarium.models import (
     PlanetariumDome,
     AstronomyShow,
@@ -51,8 +53,8 @@ class AstronomyShowViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
         "list": AstronomyShowListSerializer,
         "retrieve": AstronomyShowDetailSerializer,
     }
-
-    def _params_to_ints(self, query_string):
+    @staticmethod
+    def _params_to_ints(query_string):
         """Converts a list of string IDs to a list of integers"""
         return [int(str_id) for str_id in query_string.split(",")]
 
@@ -65,6 +67,7 @@ class AstronomyShowViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
             queryset = queryset.filter(theme__id__in=theme)
 
         title = self.request.query_params.get("title")
+
         if title:
             queryset = queryset.filter(title__icontains=title)
 
@@ -92,6 +95,11 @@ class AstronomyShowViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @extend_schema(**theme_schema)
+    def list(self, request, *args, **kwargs):
+        """Get list of planetarium"""
+        return super().list(request, *args, **kwargs)
 
 
 class ShowSessionViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):

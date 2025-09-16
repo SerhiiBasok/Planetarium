@@ -2,7 +2,6 @@ from django.db import transaction
 from rest_framework.exceptions import ValidationError
 from rest_framework import serializers
 from django.core.exceptions import ValidationError
-from rest_framework.permissions import IsAuthenticated
 
 from planetarium.models import (
     PlanetariumDome,
