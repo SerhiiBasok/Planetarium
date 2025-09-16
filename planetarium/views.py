@@ -1,3 +1,4 @@
+from django.db.models import F, Count
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
@@ -22,6 +23,7 @@ from planetarium.serializers import (
     ShowSessionDetailSerializer,
     ShowSessionSerializer,
     ReservationListSerializer,
+    ShowThemeSerializer, AstronomyShowSerializer,
 )
 
 
@@ -38,10 +40,11 @@ class PlanetariumDomeViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
 
 class AstronomyShowViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
     queryset = AstronomyShow.objects.all()
-    serializer_class = AstronomyShowDetailSerializer
+    serializer_class = AstronomyShowSerializer
     permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
 
-    action_serializers = {"list": AstronomyShowListSerializer}
+    action_serializers = {"list": AstronomyShowListSerializer,
+                          "retrieve": AstronomyShowDetailSerializer}
 
     def _params_to_ints(self, query_string):
         """Converts a list of string IDs to a list of integers"""
@@ -63,9 +66,31 @@ class AstronomyShowViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
 
 
 class ShowSessionViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
-    queryset = ShowSession.objects.all()
+    queryset = (
+        ShowSession.objects.select_related("astronomy_show", "planetarium_dome")
+        .annotate(
+            tickets_available=F("planetarium_dome__rows") * F("planetarium_dome__seats_in_row")
+                              - Count("tickets")
+        )
+    )
     serializer_class = ShowSessionSerializer
     permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
+
+    def get_queryset(self):
+        queryset = self.queryset
+
+        show_id_str = self.request.query_params.get("show")
+        dome_id_str = self.request.query_params.get("dome")
+        date_str = self.request.query_params.get("date")
+
+        if show_id_str:
+            queryset = queryset.filter(astronomy_show_id=int(show_id_str))
+        if dome_id_str:
+            queryset = queryset.filter(planetarium_dome_id=int(dome_id_str))
+        if date_str:
+            queryset = queryset.filter(show_time__date=date_str)
+
+        return queryset
 
     action_serializers = {
         "list": ShowSessionListSerializer,
@@ -75,6 +100,7 @@ class ShowSessionViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
 
 class ShowThemeViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
     queryset = ShowTheme.objects.all()
+    serializer_class = ShowThemeSerializer
 
 
 class ReservationViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):

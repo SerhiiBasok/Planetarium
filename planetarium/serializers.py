@@ -42,12 +42,23 @@ class ShowThemeSerializer(serializers.ModelSerializer):
         fields = ("id", "name")
 
 
-class AstronomyShowListSerializer(serializers.ModelSerializer):
-    theme = serializers.StringRelatedField(many=True, read_only=False)
+class AstronomyShowSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AstronomyShow
-        fields = ("id", "title", "theme")
+        fields = ("id", "title", "theme", "description")
+
+
+class AstronomyShowListSerializer(serializers.ModelSerializer):
+    theme = serializers.SlugRelatedField(
+        many=True,
+        slug_field="name",
+        queryset=ShowTheme.objects.all()
+    )
+
+    class Meta:
+        model = AstronomyShow
+        fields = ("id", "title", "theme", "description")
 
 
 class AstronomyShowDetailSerializer(AstronomyShowListSerializer):
@@ -58,30 +69,29 @@ class AstronomyShowDetailSerializer(AstronomyShowListSerializer):
 
 
 class ShowSessionSerializer(serializers.ModelSerializer):
+    astronomy_show = serializers.SlugRelatedField(
+        queryset=AstronomyShow.objects.all(),
+        slug_field="title"
+    )
+    planetarium_dome = serializers.SlugRelatedField(
+        queryset=PlanetariumDome.objects.all(),
+        slug_field="name"
+    )
     tickets_available = serializers.SerializerMethodField()
 
     class Meta:
         model = ShowSession
-        fields = ("id", "show_time", "tickets_available")
+        fields = ("id", "show_time", "astronomy_show", "planetarium_dome", "tickets_available")
 
     def get_tickets_available(self, obj):
         return obj.planetarium_dome.capacity - obj.tickets.count()
 
 
 class ShowSessionListSerializer(ShowSessionSerializer):
-    astronomy_show = serializers.CharField(
-        source="astronomy_show.title", read_only=False
-    )
-    planetarium_dome = serializers.CharField(
-        source="planetarium_dome.name", read_only=False
-    )
 
-    class Meta(ShowSessionSerializer.Meta):
-        fields = ShowSessionSerializer.Meta.fields + (
-            "astronomy_show",
-            "planetarium_dome",
-        )
-
+    class Meta:
+        model = ShowSession
+        fields = ("id", "show_time", "astronomy_show", "planetarium_dome", "tickets_available")
 
 class ShowSessionDetailSerializer(ShowSessionSerializer):
     astronomy_show = AstronomyShowDetailSerializer(read_only=False)
