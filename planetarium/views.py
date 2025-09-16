@@ -25,7 +25,9 @@ from planetarium.serializers import (
     ShowSessionDetailSerializer,
     ShowSessionSerializer,
     ReservationListSerializer,
-    ShowThemeSerializer, AstronomyShowSerializer, AstronomyShowImageSerializer,
+    ShowThemeSerializer,
+    AstronomyShowSerializer,
+    AstronomyShowImageSerializer,
 )
 
 
@@ -45,8 +47,10 @@ class AstronomyShowViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
     serializer_class = AstronomyShowSerializer
     permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
 
-    action_serializers = {"list": AstronomyShowListSerializer,
-                          "retrieve": AstronomyShowDetailSerializer}
+    action_serializers = {
+        "list": AstronomyShowListSerializer,
+        "retrieve": AstronomyShowDetailSerializer,
+    }
 
     def _params_to_ints(self, query_string):
         """Converts a list of string IDs to a list of integers"""
@@ -77,7 +81,8 @@ class AstronomyShowViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
         methods=["POST"],
         detail=True,
         url_path="upload-image",
-        permission_classes=[IsAdminOrIfAuthenticatedReadOnly])
+        permission_classes=[IsAdminOrIfAuthenticatedReadOnly],
+    )
     def upload_image(self, request):
         show = self.get_object()
         serializer = self.get_serializer(show, data=request.data)
@@ -90,12 +95,12 @@ class AstronomyShowViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
 
 
 class ShowSessionViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
-    queryset = (
-        ShowSession.objects.select_related("astronomy_show", "planetarium_dome")
-        .annotate(
-            tickets_available=F("planetarium_dome__rows") * F("planetarium_dome__seats_in_row")
-                              - Count("tickets")
-        )
+    queryset = ShowSession.objects.select_related(
+        "astronomy_show", "planetarium_dome"
+    ).annotate(
+        tickets_available=F("planetarium_dome__rows")
+        * F("planetarium_dome__seats_in_row")
+        - Count("tickets")
     )
     serializer_class = ShowSessionSerializer
     permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)

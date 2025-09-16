@@ -27,6 +27,7 @@ class ShowTheme(models.Model):
     def __str__(self):
         return self.name
 
+
 def movie_image_file_path(instance, filename):
     _, extension = os.path.splitext(filename)
     filename = f"{slugify(instance.title)}-{uuid.uuid4()}{extension}"
@@ -99,9 +100,9 @@ class Ticket(models.Model):
                 raise error_to_raise(
                     {
                         ticket_attr_name: f"{ticket_attr_name} "
-                                          f"number must be in available range: "
-                                          f"(1, {planetarium_dome_attr_name}): "
-                                          f"(1, {count_attrs})"
+                        f"number must be in available range: "
+                        f"(1, {planetarium_dome_attr_name}): "
+                        f"(1, {count_attrs})"
                     }
                 )
 
@@ -114,11 +115,11 @@ class Ticket(models.Model):
         )
 
     def save(
-            self,
-            force_insert=False,
-            force_update=False,
-            using=None,
-            update_fields=None,
+        self,
+        force_insert=False,
+        force_update=False,
+        using=None,
+        update_fields=None,
     ):
         self.full_clean()
         return super(Ticket, self).save(
@@ -128,12 +129,10 @@ class Ticket(models.Model):
     def __str__(self):
         return f"{str(self.show_session)} (row: {self.row}, seat: {self.seat})"
 
-
     class Meta:
         ordering = ["row", "seat"]
         constraints = [
-        models.UniqueConstraint(
-            fields=["show_session", "row", "seat"], name="unique_ticket_per_seat"
-        )
+            models.UniqueConstraint(
+                fields=["show_session", "row", "seat"], name="unique_ticket_per_seat"
+            )
         ]
-

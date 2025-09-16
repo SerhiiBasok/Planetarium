@@ -51,9 +51,7 @@ class AstronomyShowSerializer(serializers.ModelSerializer):
 
 class AstronomyShowListSerializer(serializers.ModelSerializer):
     theme = serializers.SlugRelatedField(
-        many=True,
-        slug_field="name",
-        queryset=ShowTheme.objects.all()
+        many=True, slug_field="name", queryset=ShowTheme.objects.all()
     )
 
     class Meta:
@@ -73,20 +71,25 @@ class AstronomyShowImageSerializer(serializers.ModelSerializer):
         model = AstronomyShow
         fields = ("id", "image")
 
+
 class ShowSessionSerializer(serializers.ModelSerializer):
     astronomy_show = serializers.SlugRelatedField(
-        queryset=AstronomyShow.objects.all(),
-        slug_field="title"
+        queryset=AstronomyShow.objects.all(), slug_field="title"
     )
     planetarium_dome = serializers.SlugRelatedField(
-        queryset=PlanetariumDome.objects.all(),
-        slug_field="name"
+        queryset=PlanetariumDome.objects.all(), slug_field="name"
     )
     tickets_available = serializers.SerializerMethodField()
 
     class Meta:
         model = ShowSession
-        fields = ("id", "show_time", "astronomy_show", "planetarium_dome", "tickets_available")
+        fields = (
+            "id",
+            "show_time",
+            "astronomy_show",
+            "planetarium_dome",
+            "tickets_available",
+        )
 
     def get_tickets_available(self, obj):
         return obj.planetarium_dome.capacity - obj.tickets.count()
@@ -96,7 +99,14 @@ class ShowSessionListSerializer(ShowSessionSerializer):
 
     class Meta:
         model = ShowSession
-        fields = ("id", "show_time", "astronomy_show", "planetarium_dome", "tickets_available")
+        fields = (
+            "id",
+            "show_time",
+            "astronomy_show",
+            "planetarium_dome",
+            "tickets_available",
+        )
+
 
 class ShowSessionDetailSerializer(ShowSessionSerializer):
     astronomy_show = AstronomyShowDetailSerializer(read_only=False)
@@ -146,7 +156,7 @@ class TicketSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ticket
-        fields = ("id", "row", "seat", "show_session", "reservation")
+        fields = ("id", "row", "seat", "show_session")
 
 
 class TicketListSerializer(TicketSerializer):
@@ -160,7 +170,7 @@ class TicketSeatsSerializer(TicketSerializer):
 
 
 class ReservationSerializer(serializers.ModelSerializer):
-    tickets = TicketSerializer(many=True, read_only=False, allow_empty=False)
+    tickets = TicketSerializer(many=True, allow_empty=False)
 
     class Meta:
         model = Reservation
