@@ -46,7 +46,7 @@ class AstronomyShowSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AstronomyShow
-        fields = ("id", "title", "theme", "description")
+        fields = ("id", "title", "theme", "description", "image")
 
 
 class AstronomyShowListSerializer(serializers.ModelSerializer):
@@ -58,15 +58,20 @@ class AstronomyShowListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AstronomyShow
-        fields = ("id", "title", "theme", "description")
+        fields = ("id", "title", "theme", "description", "image")
 
 
 class AstronomyShowDetailSerializer(AstronomyShowListSerializer):
 
     class Meta:
         model = AstronomyShow
-        fields = ("id", "title", "theme", "description")
+        fields = ("id", "title", "theme", "description", "image")
 
+
+class AstronomyShowImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AstronomyShow
+        fields = ("id", "image")
 
 class ShowSessionSerializer(serializers.ModelSerializer):
     astronomy_show = serializers.SlugRelatedField(

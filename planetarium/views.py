@@ -1,6 +1,8 @@
 from django.db.models import F, Count
-from rest_framework import viewsets
+from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from planetarium.base.mixins import BaseViewSetMethodMixin
 from planetarium.base.pagination import PlanetariumPagination
@@ -23,7 +25,7 @@ from planetarium.serializers import (
     ShowSessionDetailSerializer,
     ShowSessionSerializer,
     ReservationListSerializer,
-    ShowThemeSerializer, AstronomyShowSerializer,
+    ShowThemeSerializer, AstronomyShowSerializer, AstronomyShowImageSerializer,
 )
 
 
@@ -63,6 +65,28 @@ class AstronomyShowViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
             queryset = queryset.filter(title__icontains=title)
 
         return queryset.distinct()
+
+    @action(
+        methods=["POST"],
+        detail=True,
+        url_path="upload-image",
+        serializer_class=AstronomyShowImageSerializer,
+        permission_classes=[IsAdminOrIfAuthenticatedReadOnly],
+    )
+    @action(
+        methods=["POST"],
+        detail=True,
+        url_path="upload-image",
+        permission_classes=[IsAdminOrIfAuthenticatedReadOnly])
+    def upload_image(self, request):
+        show = self.get_object()
+        serializer = self.get_serializer(show, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ShowSessionViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
