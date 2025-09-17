@@ -171,7 +171,6 @@ class AdminAstronomyShowImageUploadTests(TestCase):
         def test_delete_play(self):
             show = astronomy_show()
             url = detail_url(show.id)
-
             res = self.client.delete(url)
 
             self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)

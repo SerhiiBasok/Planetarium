@@ -4,6 +4,8 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
+RUN apk add --no-cache gcc musl-dev libpq libpq-dev
+
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
