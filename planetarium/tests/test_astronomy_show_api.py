@@ -19,6 +19,7 @@ def astronomy_show(**params):
     defaults.update(params)
     return AstronomyShow.objects.create(**defaults)
 
+
 def sample_theme(**params):
     defaults = {
         "name": "Space",
@@ -27,11 +28,14 @@ def sample_theme(**params):
 
     return ShowTheme.objects.create(**defaults)
 
+
 def detail_url(show_id):
     return reverse("planetarium:astronomy-show-detail", args=[show_id])
 
+
 def create_theme(name="Space"):
     return ShowTheme.objects.create(name=name)
+
 
 class UnauthenticatedPlayApiTests(TestCase):
     def setUp(self):
@@ -40,6 +44,7 @@ class UnauthenticatedPlayApiTests(TestCase):
     def test_auth_required(self):
         res = self.client.get(ASTRONOMY_SHOW_URL)
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+
 
 class AuthenticatedAstronomyShowApiTest(TestCase):
     def setUp(self):
@@ -61,7 +66,6 @@ class AuthenticatedAstronomyShowApiTest(TestCase):
 
         self.assertIn(serializer1.data, res.data)
         self.assertNotIn(serializer2.data, res.data)
-
 
     def test_filter_show_by_theme(self):
         show1 = astronomy_show(title="Show1")
@@ -102,9 +106,7 @@ class AdminAstronomyShowImageUploadTests(TestCase):
         self.admin = get_user_model().objects.create_superuser(
             "admin@test.com", "adminpass"
         )
-        self.user = get_user_model().objects.create_user(
-            "user@test.com", "userpass"
-        )
+        self.user = get_user_model().objects.create_user("user@test.com", "userpass")
         self.client = APIClient()
 
     def _make_image_file(self):
