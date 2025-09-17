@@ -126,7 +126,11 @@ class AuthenticatedShowSessionApiTests(TestCase):
     def test_free_seats_detail(self):
         session = sample_show_session()
         reservation = sample_reservation(user=self.user)
-        sample_ticket(session=session, reservation=reservation, row=1, seat=1)
+        sample_ticket(
+            session=session,
+            reservation=reservation,
+            row=1,
+            seat=1)
 
         url = detail_url(session.id)
         res = self.client.get(url)
