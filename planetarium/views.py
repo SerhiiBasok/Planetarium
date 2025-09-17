@@ -81,7 +81,6 @@ class AstronomyShowViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
         serializer_class=AstronomyShowImageSerializer,
         permission_classes=[IsAdminOrIfAuthenticatedReadOnly],
     )
-
     def upload_image(self, request, pk=None):
         show = self.get_object()
         serializer = self.get_serializer(show, data=request.data)
