@@ -45,7 +45,7 @@ class PlanetariumDomeViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
 
 
 class AstronomyShowViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
-    queryset = AstronomyShow.objects.all()
+    queryset = AstronomyShow.objects.all().prefetch_related("theme")
     serializer_class = AstronomyShowSerializer
     permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
 
@@ -53,13 +53,14 @@ class AstronomyShowViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
         "list": AstronomyShowListSerializer,
         "retrieve": AstronomyShowDetailSerializer,
     }
+
     @staticmethod
     def _params_to_ints(query_string):
         """Converts a list of string IDs to a list of integers"""
         return [int(str_id) for str_id in query_string.split(",")]
 
     def get_queryset(self):
-        queryset = self.queryset
+        queryset = self.queryset.prefetch_related("theme")
         theme = self.request.query_params.get("theme")
 
         if theme:
@@ -80,13 +81,8 @@ class AstronomyShowViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
         serializer_class=AstronomyShowImageSerializer,
         permission_classes=[IsAdminOrIfAuthenticatedReadOnly],
     )
-    @action(
-        methods=["POST"],
-        detail=True,
-        url_path="upload-image",
-        permission_classes=[IsAdminOrIfAuthenticatedReadOnly],
-    )
-    def upload_image(self, request):
+
+    def upload_image(self, request, pk=None):
         show = self.get_object()
         serializer = self.get_serializer(show, data=request.data)
 
@@ -103,12 +99,14 @@ class AstronomyShowViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
 
 
 class ShowSessionViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
-    queryset = ShowSession.objects.select_related(
-        "astronomy_show", "planetarium_dome"
-    ).annotate(
-        tickets_available=F("planetarium_dome__rows")
-        * F("planetarium_dome__seats_in_row")
-        - Count("tickets")
+    queryset = (
+        ShowSession.objects.select_related("astronomy_show", "planetarium_dome")
+        .annotate(tickets_sold=Count("tickets"))
+        .annotate(
+            tickets_available=F("planetarium_dome__rows")
+            * F("planetarium_dome__seats_in_row")
+            - F("tickets_sold")
+        )
     )
     serializer_class = ShowSessionSerializer
     permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
@@ -141,7 +139,10 @@ class ShowThemeViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
 
 
 class ReservationViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
-    queryset = Reservation.objects.prefetch_related("tickets")
+    queryset = Reservation.objects.prefetch_related(
+        "tickets__show_session__astronomy_show",
+        "tickets__show_session__planetarium_dome",
+    )
     serializer_class = ReservationSerializer
     pagination_class = PlanetariumPagination
 
