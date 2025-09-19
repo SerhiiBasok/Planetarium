@@ -137,6 +137,14 @@ class ShowThemeViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
     serializer_class = ShowThemeSerializer
 
 
+    action_permissions = {
+        "list": [IsAuthenticated],
+        "retrieve": [IsAuthenticated],
+        "create": [IsAdminOrIfAuthenticatedReadOnly],
+        "destroy": [IsAdminOrIfAuthenticatedReadOnly],
+    }
+
+
 class ReservationViewSet(BaseViewSetMethodMixin, viewsets.ModelViewSet):
     queryset = Reservation.objects.prefetch_related(
         "tickets__show_session__astronomy_show",
