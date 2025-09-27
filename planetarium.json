@@ -1,0 +1,283 @@
+[
+  {
+    "model": "planetarium.planetariumdome",
+    "pk": 1,
+    "fields": {
+      "name": "Main Dome",
+      "rows": 12,
+      "seats_in_row": 20
+    }
+  },
+  {
+    "model": "planetarium.planetariumdome",
+    "pk": 2,
+    "fields": {
+      "name": "Small Dome",
+      "rows": 8,
+      "seats_in_row": 15
+    }
+  },
+  {
+    "model": "planetarium.planetariumdome",
+    "pk": 3,
+    "fields": {
+      "name": "VIP Dome",
+      "rows": 6,
+      "seats_in_row": 10
+    }
+  },
+  {
+    "model": "planetarium.planetariumdome",
+    "pk": 4,
+    "fields": {
+      "name": "Ultra Dome",
+      "rows": 15,
+      "seats_in_row": 25
+    }
+  },
+  {
+    "model": "planetarium.planetariumdome",
+    "pk": 5,
+    "fields": {
+      "name": "Kids Dome",
+      "rows": 5,
+      "seats_in_row": 12
+    }
+  },
+
+  {
+    "model": "planetarium.showtheme",
+    "pk": 1,
+    "fields": {"name": "Space Travel"}
+  },
+  {
+    "model": "planetarium.showtheme",
+    "pk": 2,
+    "fields": {"name": "Cosmology"}
+  },
+  {
+    "model": "planetarium.showtheme",
+    "pk": 3,
+    "fields": {"name": "Astrobiology"}
+  },
+  {
+    "model": "planetarium.showtheme",
+    "pk": 4,
+    "fields": {"name": "Galaxies"}
+  },
+  {
+    "model": "planetarium.showtheme",
+    "pk": 5,
+    "fields": {"name": "Black Holes"}
+  },
+  {
+    "model": "planetarium.showtheme",
+    "pk": 6,
+    "fields": {"name": "Stellar Evolution"}
+  },
+  {
+    "model": "planetarium.showtheme",
+    "pk": 7,
+    "fields": {"name": "Solar System"}
+  },
+  {
+    "model": "planetarium.showtheme",
+    "pk": 8,
+    "fields": {"name": "Exoplanets"}
+  },
+  {
+    "model": "planetarium.showtheme",
+    "pk": 9,
+    "fields": {"name": "Dark Matter"}
+  },
+  {
+    "model": "planetarium.showtheme",
+    "pk": 10,
+    "fields": {"name": "Big Bang"}
+  },
+
+  {
+    "model": "planetarium.astronomyshow",
+    "pk": 1,
+    "fields": {
+      "title": "Journey to Mars",
+      "description": "A guided trip through the history and future of Mars exploration.",
+      "theme": [1, 7, 8]
+    }
+  },
+  {
+    "model": "planetarium.astronomyshow",
+    "pk": 2,
+    "fields": {
+      "title": "Black Holes Mysteries",
+      "description": "Exploring the most enigmatic objects in the universe.",
+      "theme": [2, 5, 9]
+    }
+  },
+  {
+    "model": "planetarium.astronomyshow",
+    "pk": 3,
+    "fields": {
+      "title": "The Birth of Stars",
+      "description": "A dive into stellar nurseries and star formation.",
+      "theme": [4, 6, 10]
+    }
+  },
+  {
+    "model": "planetarium.astronomyshow",
+    "pk": 4,
+    "fields": {
+      "title": "Secrets of the Solar System",
+      "description": "Tour through planets, moons, and asteroids.",
+      "theme": [7, 8]
+    }
+  },
+  {
+    "model": "planetarium.astronomyshow",
+    "pk": 5,
+    "fields": {
+      "title": "Cosmic Origins",
+      "description": "From the Big Bang to galaxy clusters.",
+      "theme": [2, 9, 10]
+    }
+  },
+
+  {
+    "model": "planetarium.showsession",
+    "pk": 1,
+    "fields": {
+      "astronomy_show": 1,
+      "planetarium_dome": 1,
+      "show_time": "2025-09-15T18:00:00Z"
+    }
+  },
+  {
+    "model": "planetarium.showsession",
+    "pk": 2,
+    "fields": {
+      "astronomy_show": 2,
+      "planetarium_dome": 2,
+      "show_time": "2025-09-16T19:30:00Z"
+    }
+  },
+  {
+    "model": "planetarium.showsession",
+    "pk": 3,
+    "fields": {
+      "astronomy_show": 3,
+      "planetarium_dome": 3,
+      "show_time": "2025-09-17T20:00:00Z"
+    }
+  },
+  {
+    "model": "planetarium.showsession",
+    "pk": 4,
+    "fields": {
+      "astronomy_show": 4,
+      "planetarium_dome": 4,
+      "show_time": "2025-09-18T18:00:00Z"
+    }
+  },
+  {
+    "model": "planetarium.showsession",
+    "pk": 5,
+    "fields": {
+      "astronomy_show": 5,
+      "planetarium_dome": 5,
+      "show_time": "2025-09-19T19:00:00Z"
+    }
+  },
+  {
+    "model": "planetarium.showsession",
+    "pk": 6,
+    "fields": {
+      "astronomy_show": 1,
+      "planetarium_dome": 2,
+      "show_time": "2025-09-20T18:30:00Z"
+    }
+  },
+  {
+    "model": "planetarium.showsession",
+    "pk": 7,
+    "fields": {
+      "astronomy_show": 2,
+      "planetarium_dome": 3,
+      "show_time": "2025-09-21T19:30:00Z"
+    }
+  },
+  {
+    "model": "planetarium.showsession",
+    "pk": 8,
+    "fields": {
+      "astronomy_show": 3,
+      "planetarium_dome": 4,
+      "show_time": "2025-09-22T20:00:00Z"
+    }
+  },
+  {
+    "model": "planetarium.showsession",
+    "pk": 9,
+    "fields": {
+      "astronomy_show": 4,
+      "planetarium_dome": 5,
+      "show_time": "2025-09-23T18:00:00Z"
+    }
+  },
+  {
+    "model": "planetarium.showsession",
+    "pk": 10,
+    "fields": {
+      "astronomy_show": 5,
+      "planetarium_dome": 1,
+      "show_time": "2025-09-24T19:30:00Z"
+    }
+  },
+
+  {
+    "model": "planetarium.reservation",
+    "pk": 1,
+    "fields": {
+      "created_at": "2025-09-10T10:00:00Z",
+      "user": 1
+    }
+  },
+  {
+    "model": "planetarium.reservation",
+    "pk": 2,
+    "fields": {
+      "created_at": "2025-09-11T11:00:00Z",
+      "user": 1
+    }
+  },
+
+  {
+    "model": "planetarium.ticket",
+    "pk": 1,
+    "fields": {
+      "row": 1,
+      "seat": 5,
+      "show_session": 1,
+      "reservation": 1
+    }
+  },
+  {
+    "model": "planetarium.ticket",
+    "pk": 2,
+    "fields": {
+      "row": 2,
+      "seat": 8,
+      "show_session": 2,
+      "reservation": 2
+    }
+  },
+  {
+    "model": "planetarium.ticket",
+    "pk": 3,
+    "fields": {
+      "row": 3,
+      "seat": 10,
+      "show_session": 3,
+      "reservation": 1
+    }
+  }
+]
